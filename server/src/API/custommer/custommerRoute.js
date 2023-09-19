@@ -1,10 +1,13 @@
 import customerController from "./custommerController";
+import { checkUserJWT, checkUserPermission } from "../../middleware/JwtAction";
 import express from "express";
 const router = express.Router();
 
 export default function custommerRoute(app) {
+  router.all("*", checkUserJWT, checkUserPermission);
   router.get("/list", customerController.getAll);
-  router.post("/add", customerController.addCustommer);
+  router.post("/register-custommer", customerController.addCustommer);
   router.delete("/delete/:id", customerController.RemoveById);
+  router.get("/count", customerController.countCustommer);
   return app.use("/custommer", router);
 }

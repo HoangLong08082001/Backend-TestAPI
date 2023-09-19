@@ -3,28 +3,47 @@ import dotenv from "dotenv";
 import employeeRoutes from "./API/employee/employeeRoutes";
 import positionRoute from "./API/position/positionRoute";
 import custommerRoute from "./API/custommer/custommerRoute";
-import connection from "./config/database";
+import tourRoutes from "./API/tour/tourRoutes";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import { createJwt, verifyToken } from "./middleware/JwtAction";
+import pool from "./config/database";
+import loginRoutes from "./API/login/loginRoutes";
 const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: [process.env.PORT_VIEWS],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.PORT_VIEWS);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, OPTIONS, POST, PUT, DELETE"
   );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "x-requested-with,content-type, Authorization"
+  );
+  res.setHeader("Cache-Control", "no-cache");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
   next();
 });
-
 employeeRoutes(app);
 positionRoute(app);
 custommerRoute(app);
+tourRoutes(app);
+loginRoutes(app);
 
 app.listen(port, () => {
   console.log("Website is running on the port", port);

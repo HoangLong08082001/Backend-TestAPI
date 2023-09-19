@@ -1,39 +1,113 @@
 import employeeModel from "./employeeService";
-import connection from "../../config/database";
+import pool from "../../config/database";
+import bcrypt, { hash } from "bcrypt";
+const salt = 10;
 const getAll = (req, res) => {
-  connection.query(employeeModel.getAll, (err, result) => {
+  console.log(req.user);
+  pool.query(employeeModel.getAll, (err, result) => {
     if (err) throw err;
-    res.send({ data: result });
+    if (result) {
+      return res.status(200).json({ data: result });
+    }
   });
 };
 
 const addEmployee = (req, res) => {
   let tennv = req.body.TenNV;
-  let cmnd = req.body.CMND;
+  let cmnd = req.body.cmnd;
   let ngaysinh = req.body.Ngaysinh;
   let sdt = req.body.Sdt;
   let email = req.body.Email;
   let pass = req.body.Password;
-  let id_vitri = req.body.id_vitri;
-  if (!tennv || !cmnd || !ngaysinh || !sdt || !email || !pass || !id_vitri) {
-    return res.send({ data: "Please fill all" });
-  }
-  connection.query(
-    employeeModel.addEmployee,
-    [tennv, cmnd, ngaysinh, sdt, email, pass, id_vitri],
-    (err, result) => {
-      if (err) throw err;
-      res.send({ data: "ADD SUCCESS" });
+  let id_vitri = req.body.Position;
+  bcrypt.hash(pass, salt, (err, hash) => {
+    if (err) {
+      console.log(err);
     }
-  );
-};
-
-const removeByID = (req, res) => {
-  let id = req.params.id;
-  connection.query(employeeModel.removeByID, [id], (err, result) => {
-    if (err) throw err;
-    res.send({ data: "DELETE SUCCESS" });
+    pool.query(
+      employeeModel.addEmployee,
+      [tennv, cmnd, ngaysinh, sdt, email, hash, id_vitri],
+      (err, data) => {
+        if (err) {
+          return res.json("error");
+        }
+        return res.json(data);
+      }
+    );
   });
 };
 
-module.exports = { getAll, removeByID, addEmployee };
+const removeByID = (req, res) => {
+  const id = req.params.id;
+  pool.query(employeeModel.deleteById, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json("fails");
+    }
+    if (result) {
+      return res.status(200).json("success");
+    }
+  });
+};
+const getById = (req, res) => {
+  const id = req.params.id;
+  pool.query(employeeModel.byId, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json("fails");
+    }
+    if (result) {
+      return res.status(200).json({ data: result });
+    }
+  });
+};
+const UpdateEmployee = (req, res) => {
+  let id = req.params.id;
+  let tennv = req.body.TenNV;
+  let cmnd = req.body.cmnd;
+  let sdt = req.body.Sdt;
+  let id_vitri = req.body.Position;
+  pool.query(
+    employeeModel.updateById,
+    [tennv, cmnd, sdt, id_vitri, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(200).json("fails");
+      }
+      if (result) {
+        return res.status(200).json("success");
+      }
+    }
+  );
+};
+const countEmployee = (req, res) => {
+  pool.query(employeeModel.count, [], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json("fails");
+    }
+    if (result) {
+      return res.status(200).json(result);
+    }
+  });
+};
+const getUserAccount = (req, res) => {
+  return res.status(200).json({
+    message: "success",
+    data: {
+      access_token: req.token,
+      role: req.user.data,
+      email: req.user.email,
+    },
+  });
+};
+module.exports = {
+  getAll,
+  removeByID,
+  addEmployee,
+  getById,
+  UpdateEmployee,
+  countEmployee,
+  getUserAccount,
+};

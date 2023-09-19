@@ -1,7 +1,9 @@
-import connection from "../../config/database";
+import pool from "../../config/database";
 import custommerModel from "./custommerService";
+import bcrypt, { hash } from "bcrypt";
+const salt = 10;
 const getAll = (req, res) => {
-  connection.query(custommerModel.getAll, [], (err, result) => {
+  pool.query(custommerModel.getAll, [], (err, result) => {
     if (err) throw err;
     return res.status(200).json({
       data: "ok",
@@ -13,30 +15,47 @@ const getAll = (req, res) => {
 const addCustommer = (req, res) => {
   let tenkh = req.body.TenKH;
   let cmnd = req.body.CMND;
-  let diachi = req.body.DiaChi;
-  let ngaysinh = req.body.Ngaysinh;
+  let diachi = req.body.Diachi;
   let sdt = req.body.Sdt;
-  let username = req.body.Username;
-  let password = req.body.Password;
-  if (!tenkh || !sdt) {
-    return res.send("Please fill ");
-  }
-  connection.query(
-    custommerModel.addCustommer,
-    [tenkh, cmnd, diachi, ngaysinh, sdt, username, password],
-    (err, result) => {
-      if (err) throw err;
-      return res.send({ data: "Add success" });
+  let username = req.body.email;
+  let pass = req.body.password;
+  bcrypt.hash(pass, salt, (err, hash) => {
+    if (err) {
+      console.log(err);
+    } else {
+      pool.query(
+        custommerModel.register,
+        [tenkh, cmnd, diachi, sdt, username, hash],
+        (err, result) => {
+          if (err) {
+            console.log(err);
+            return res.status(200).json("fails");
+          }
+          if (result) {
+            return res.status(200).json("success");
+          }
+        }
+      );
     }
-  );
+  });
 };
-
+const countCustommer = (req, res) => {
+  pool.query(custommerModel.count, [], (err, rows) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json("fails");
+    }
+    if (rows) {
+      return res.status(200).json(rows);
+    }
+  });
+};
 const RemoveById = (req, res) => {
   let id = req.params.id;
-  connection.query(custommerModel.RemoveById, [id], (err, result) => {
+  pool.query(custommerModel.RemoveById, [id], (err, result) => {
     if (err) throw err;
     return res.send({ data: "Remove success" });
   });
 };
 
-module.exports = { getAll, addCustommer, RemoveById };
+module.exports = { getAll, addCustommer, RemoveById, countCustommer };

@@ -1,19 +1,13 @@
-import createPool, { createConnection } from "mysql2";
-import dotenv from "dotenv";
+const { createPool } = require("mysql");
+const dotenv = require("dotenv");
 dotenv.config();
-const connection = createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "TRAVEL_DATABASE",
+const pool = createPool({
+  port: process.env.DB_PORT,
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASS,
+  database: process.env.MYSQL_DB,
+  connectionLimit: 10,
 });
 
-connection.connect((err) => {
-  if (err) {
-    console.log("FAILS");
-    throw err;
-  } else {
-    console.log("SUCCESS");
-  }
-});
-module.exports = connection;
+module.exports = pool;
