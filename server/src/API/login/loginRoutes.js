@@ -6,5 +6,6 @@ export default function loginRoutes(app) {
   router.all("*", checkUserJWT, checkUserPermission);
   router.post("/login", loginController.LoginEmployee);
   router.post("/logout", loginController.LogoutEmployee);
+
   return app.use("/api", router);
 }

@@ -53,8 +53,12 @@ const countCustommer = (req, res) => {
 const RemoveById = (req, res) => {
   let id = req.params.id;
   pool.query(custommerModel.RemoveById, [id], (err, result) => {
-    if (err) throw err;
-    return res.send({ data: "Remove success" });
+    if (err) {
+      return res.status(200).json({ data: "Remove fails" });
+    }
+    if (result) {
+      return res.status(200).json({ data: "Remove success" });
+    }
   });
 };
 

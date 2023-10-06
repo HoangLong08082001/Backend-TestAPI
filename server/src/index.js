@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { createJwt, verifyToken } from "./middleware/JwtAction";
 import pool from "./config/database";
+import TourServerRoutes from "./API/TourServer/TourServerRoutes";
 import loginRoutes from "./API/login/loginRoutes";
 const cors = require("cors");
 dotenv.config();
@@ -44,7 +45,7 @@ positionRoute(app);
 custommerRoute(app);
 tourRoutes(app);
 loginRoutes(app);
-
+TourServerRoutes(app);
 app.listen(port, () => {
   console.log("Website is running on the port", port);
 });

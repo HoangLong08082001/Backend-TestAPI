@@ -38,23 +38,23 @@ const addEmployee = (req, res) => {
 };
 
 const removeByID = (req, res) => {
-  const id = req.params.id;
+  let id = req.body.id;
   pool.query(employeeModel.deleteById, [id], (err, result) => {
     if (err) {
       console.log(err);
-      return res.status(200).json("fails");
+      return res.status(200).json({ message: "fails" });
     }
     if (result) {
-      return res.status(200).json("success");
+      return res.status(200).json({ message: "success" });
     }
   });
 };
 const getById = (req, res) => {
-  const id = req.params.id;
+  let id = req.query.id;
   pool.query(employeeModel.byId, [id], (err, result) => {
     if (err) {
       console.log(err);
-      return res.status(200).json("fails");
+      return res.status(200).json({ message: "fails" });
     }
     if (result) {
       return res.status(200).json({ data: result });
@@ -62,7 +62,7 @@ const getById = (req, res) => {
   });
 };
 const UpdateEmployee = (req, res) => {
-  let id = req.params.id;
+  let id = req.body.id;
   let tennv = req.body.TenNV;
   let cmnd = req.body.cmnd;
   let sdt = req.body.Sdt;
@@ -72,11 +72,14 @@ const UpdateEmployee = (req, res) => {
     [tennv, cmnd, sdt, id_vitri, id],
     (err, result) => {
       if (err) {
-        console.log(err);
-        return res.status(200).json("fails");
+        return res.status(200).json({
+          message: "fails",
+        });
       }
       if (result) {
-        return res.status(200).json("success");
+        return res.status(200).json({
+          message: "success",
+        });
       }
     }
   );

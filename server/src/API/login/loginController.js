@@ -1,7 +1,7 @@
-import pool from "../../config/database";
+import pool, { emit } from "../../config/database";
 import jwtModal from "../JWT/jwtService";
 import LoginModal from "./loginService";
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcrypt";
 import { createJwt } from "../../middleware/JwtAction";
 import dotenv from "dotenv";
 dotenv.config();
@@ -61,4 +61,5 @@ const LogoutEmployee = (req, res) => {
     return res.status(500).json({ message: "error from server" });
   }
 };
+
 module.exports = { LoginEmployee, LogoutEmployee };

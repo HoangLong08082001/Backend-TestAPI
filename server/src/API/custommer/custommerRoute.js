@@ -5,9 +5,9 @@ const router = express.Router();
 
 export default function custommerRoute(app) {
   router.all("*", checkUserJWT, checkUserPermission);
-  router.get("/list", customerController.getAll);
+  router.get("/list-customer", customerController.getAll);
   router.post("/register-custommer", customerController.addCustommer);
-  router.delete("/delete/:id", customerController.RemoveById);
+  router.delete("/delete-custommer/:id", customerController.RemoveById);
   router.get("/count", customerController.countCustommer);
   return app.use("/custommer", router);
 }

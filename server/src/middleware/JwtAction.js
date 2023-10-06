@@ -1,7 +1,13 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-const nonSecurePath = ["/", "/login", "/logout"];
+const nonSecurePath = [
+  "/",
+  "/login",
+  "/logout",
+  "/register-custommer",
+  "/search/",
+];
 //Tao token
 const createJwt = (payload) => {
   let key = process.env.SECRET_KEY;

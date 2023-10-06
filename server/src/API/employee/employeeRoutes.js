@@ -8,9 +8,9 @@ export default function employeeRoutes(app) {
   router.get("/account", employeeController.getUserAccount);
   router.get("/list", employeeController.getAll);
   router.post("/add", employeeController.addEmployee);
-  router.delete("/delete/:id", employeeController.removeByID);
-  router.get("/GetById/:id", employeeController.getById);
-  router.put("/update/:id", employeeController.UpdateEmployee);
+  router.delete("/delete-employee", employeeController.removeByID);
+  router.get("/GetById-employee/:id", employeeController.getById);
+  router.put("/update-employee", employeeController.UpdateEmployee);
   router.get("/count", employeeController.countEmployee);
   return app.use("/employees", router);
 }
