@@ -2,7 +2,7 @@ const pool = require("../../config/database");
 
 module.exports = {
   gettour: (callBack) => {
-    pool.query(`select * from tour`, [], (error, results) => {
+    pool.query(`select * from tour `, [], (error, results) => {
       if (error) {
         return callBack(error);
       }
@@ -23,7 +23,7 @@ module.exports = {
   },
   Searchtour: (data, callBack) => {
     pool.query(
-      `select * from tour where tour.DiaDiemDen=? and tour.NgayDi=? and tour.NgayVe=?`,
+      `select * from tour where tour.DiaDiemDen=? and tour.NgayDi>=? and tour.NgayVe<=? `,
       [data.DiaDiemDen, data.NgayDi, data.NgayVe],
       (error, results) => {
         if (error) {

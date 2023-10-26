@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import clientRouter from "./API/Login-client/ClientRoute";
 import employeeRoutes from "./API/employee/employeeRoutes";
 import positionRoute from "./API/position/positionRoute";
 import custommerRoute from "./API/custommer/custommerRoute";
@@ -40,6 +41,7 @@ app.use(function (req, res, next) {
   }
   next();
 });
+clientRouter(app);
 employeeRoutes(app);
 positionRoute(app);
 custommerRoute(app);
