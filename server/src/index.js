@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import fileUpload from "express-fileupload";
 import clientRouter from "./API/Login-client/ClientRoute";
 import employeeRoutes from "./API/employee/employeeRoutes";
 import positionRoute from "./API/position/positionRoute";
@@ -15,7 +16,11 @@ const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
-
+app.use(
+  fileUpload({
+    createParentPath: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

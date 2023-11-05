@@ -7,6 +7,7 @@ const nonSecurePath = [
   "/logout",
   "/register-custommer",
   "/search",
+  "/getNameEmployee",
 ];
 //Tao token
 const createJwt = (payload) => {

@@ -105,6 +105,16 @@ const getUserAccount = (req, res) => {
     },
   });
 };
+const getName = (req, res) => {
+  pool.query(employeeModel.getNameEmployee, [], (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    if (result) {
+      return res.status(200).json({ data: result });
+    }
+  });
+};
 module.exports = {
   getAll,
   removeByID,
@@ -113,4 +123,5 @@ module.exports = {
   UpdateEmployee,
   countEmployee,
   getUserAccount,
+  getName,
 };

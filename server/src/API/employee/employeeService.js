@@ -11,6 +11,7 @@ class employeeModel {
   static updateById =
     "UPDATE nhanvien SET TenNV=?, CMND=?, Sdt=?, id_vitri=? WHERE MaNV=?";
   static count = "SELECT COUNT(*) AS count FROM nhanvien";
+  static getNameEmployee = "SELECT TenNV FROM nhanvien";
 }
 
 module.exports = employeeModel;

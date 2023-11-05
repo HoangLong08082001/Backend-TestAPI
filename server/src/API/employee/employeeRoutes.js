@@ -12,5 +12,6 @@ export default function employeeRoutes(app) {
   router.get("/GetById-employee/:id", employeeController.getById);
   router.put("/update-employee", employeeController.UpdateEmployee);
   router.get("/count", employeeController.countEmployee);
+  router.get("/getNameEmployee", employeeController.getName);
   return app.use("/employees", router);
 }

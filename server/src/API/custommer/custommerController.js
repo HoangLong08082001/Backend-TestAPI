@@ -51,13 +51,14 @@ const countCustommer = (req, res) => {
   });
 };
 const RemoveById = (req, res) => {
-  let id = req.params.id;
+  let id = req.body.id;
   pool.query(custommerModel.RemoveById, [id], (err, result) => {
     if (err) {
-      return res.status(200).json({ data: "Remove fails" });
+      console.log(err);
+      return res.status(200).json({ message: "fails" });
     }
     if (result) {
-      return res.status(200).json({ data: "Remove success" });
+      return res.status(200).json({ message: "success" });
     }
   });
 };
