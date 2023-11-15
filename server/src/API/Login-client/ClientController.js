@@ -25,6 +25,7 @@ const LoginClient = (req, res) => {
                 return res.status(200).json({
                   message: "success",
                   username: username,
+                  MaKH:data[0].MaKH,
                 });
               
            

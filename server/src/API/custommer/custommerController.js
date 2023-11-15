@@ -11,6 +11,16 @@ const getAll = (req, res) => {
     });
   });
 };
+const getDK = (req, res) => {
+  const MaKH=req.body.MaKH;
+  pool.query(custommerModel.getDK, [MaKH], (err, result) => {
+    if (err) throw err;
+    return res.status(200).json({
+      data: "success",
+      list: result,
+    });
+  });
+};
 
 const addCustommer = (req, res) => {
   let tenkh = req.body.TenKH;
@@ -63,4 +73,4 @@ const RemoveById = (req, res) => {
   });
 };
 
-module.exports = { getAll, addCustommer, RemoveById, countCustommer };
+module.exports = { getAll, addCustommer, RemoveById, countCustommer,getDK };

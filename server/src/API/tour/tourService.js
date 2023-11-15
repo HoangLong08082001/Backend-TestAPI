@@ -2,7 +2,7 @@ const pool = require("../../config/database");
 
 module.exports = {
   gettour: (callBack) => {
-    pool.query(`select * from tour `, [], (error, results) => {
+    pool.query(`select * from tour LIMIT 8 `, [], (error, results) => {
       if (error) {
         return callBack(error);
       }
@@ -33,48 +33,24 @@ module.exports = {
       }
     );
   },
+  Addtourlove: (data, callBack) => {
+    pool.query(
+      `INSERT INTO touryeuthich (MaKH,MaTour) VALUES (?,?)`,
+      [data.MaKH, data.MaTour],
+      (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  gettourlove: (data,callBack) => {
+    pool.query(`SELECT tour.HinhAnh,tour.TenTour,tour.MaTour from touryeuthich INNER JOIN khachhang on touryeuthich.MaKH=khachhang.MaKH INNER JOIN tour on touryeuthich.MaTour=tour.MaTour where touryeuthich.MaKH=? `, [data.MaKH], (error, results) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
+  },
 };
-// import pool from "../../config/database";
-
-// class tourModal {
-//   static getAll = (callBack) => {
-//     pool.query("SELECT * FROM tour", [], (err, result) => {
-//       if (err) {
-//         return callBack(err);
-//       }
-//       if (result) {
-//         return callBack(null, result);
-//       }
-//     });
-//   };
-
-//   static getById = (id, callBack) => {
-//     pool.query("SELECT * FROM tour WHERE MaTour=?", [id], (err, result) => {
-//       if (err) {
-//         return callBack(err);
-//       }
-//       if (result) {
-//         return callBack(null, result);
-//       }
-//     });
-//   };
-
-//   static SearchTour = (data, callBack) => {
-//     pool.query(
-//       "SELECT * FROM tour WHERE DiaDiemDen=? and NgayDi=? and NgayVe=?",
-//       [
-//         [data.DiaDiemDen, data.NgayDi, data.NgayVe],
-//         (err, result) => {
-//           if (err) {
-//             return callBack(err);
-//           }
-//           if (result) {
-//             return callBack(null, result);
-//           }
-//         },
-//       ]
-//     );
-//   };
-// }
-
-// module.exports = tourModal;

@@ -1,5 +1,5 @@
-const { gettour, gettourid, Searchtour } = require("../tour/tourService");
-
+const { gettour, gettourid, Searchtour ,Addtourlove,gettourlove } = require("../tour/tourService");
+const pool = require("../../config/database");
 module.exports = {
   gettourall: (reg, res) => {
     gettour((err, results) => {
@@ -47,49 +47,65 @@ module.exports = {
       });
     });
   },
+  addlovetour: (reg, res) => {
+    const data = reg.body;
+    console.log(data)
+    if(data!=null)
+    {
+      pool.query(
+        `select * from touryeuthich where touryeuthich.MaKH=? and touryeuthich.MaTour=? `,
+        [data.MaKH, data.MaTour],
+        (error, results) => {
+          
+          if (error) {
+            return res.status(500).json({
+                     success: err,
+                    message: "Database connection error",
+                  });
+          }
+          else if(results.length === 0)
+          {
+            
+            Addtourlove(data, (err, results) => {
+              if (err) {
+                console.log(err);
+                return res.status(500).json({
+                  success: err,
+                  message: "Database connection error",
+                });
+              }
+              return res.status(200).json({
+                data:"success",
+              });
+            });
+          }
+          else{
+            return res.status(200).json({
+              data:"exist",
+            });
+          }
+          
+        }
+      );
+    }
+   
+  },
+  Gettourlove: (reg, res) => {
+    const data={
+      MaKH:reg.body.MaKH
+    }
+    gettourlove(data,(err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: err,
+          message: "Database connection error",
+        });
+      } 
+      return res.status(200).json({
+        data: results,
+      });
+    });
+  },
 };
 
-// import tourModal from "./tourService";
-// const getAllTour = (req, res) => {
-//   tourModal.getAll((err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(500).json({
-//         success: err,
-//         message: "Database connection error",
-//       });
-//     }
-//     console.log(result);
-//     return res.status(200).json({
-//       data: result,
-//     });
-//   });
-// };
-// const getTourById = (req, res) => {
-//   tourModal.getById((err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(500).json({
-//         success: err,
-//         message: "Database connection error",
-//       });
-//     }
-//     return res.status(200).json({
-//       data: result,
-//     });
-//   });
-// };
-// const searchTour = (req, res) => {
-//   const data = req.body;
-//   tourModal.SearchTour(data, (err, result) => {
-//     if (err) {
-//       return res.status(500).json({
-//         success: err,
-//         message: "Database connection error",
-//       });
-//     }
-//     return res.status(200).json({
-//       data: result,
-//     });
-//   });
-// };

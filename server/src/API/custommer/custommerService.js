@@ -1,5 +1,6 @@
 class custommerModel {
   static getAll = "SELECT * FROM khachhang";
+  static getDK = "SELECT * FROM khachhang where khachhang.MaKH=?";
   static register =
     "INSERT INTO khachhang(TenKH, CMND, DiaChi, Sdt, username, password) VALUES(?,?,?,?,?,?)";
   static RemoveById = "DELETE FROM khachhang WHERE MaKH = ?";
