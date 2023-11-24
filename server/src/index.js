@@ -13,6 +13,7 @@ import { createJwt, verifyToken } from "./middleware/JwtAction";
 import pool from "./config/database";
 import TourServerRoutes from "./API/TourServer/TourServerRoutes";
 import loginRoutes from "./API/login/loginRoutes";
+import TicketRoute from "./API/Ticket/TicketRoute";
 const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT;
@@ -55,6 +56,7 @@ commentRoute(app);
 tourRoutes(app);
 loginRoutes(app);
 TourServerRoutes(app);
+TicketRoute(app);
 app.listen(port, () => {
   console.log("Website is running on the port", port);
 });

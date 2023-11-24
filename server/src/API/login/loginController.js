@@ -10,20 +10,21 @@ const LoginEmployee = (req, res) => {
   let email = req.body.username;
   pool.query(LoginModal.loginEmployee, [email], (err, data) => {
     if (err) {
-      return res.status(200).json("fails");
+      return res.status(200).json({ message: "fails" });
     }
-    if (data.length > 0) {
+    if (data.length > 0 && data[0].TrangThai===1) {
+      console.log(data[0]);
       bcrypt.compare(
         req.body.password.toString(),
         data[0].password,
         (err, response) => {
           if (err) {
-            return res.status(200).json("fails");
+            return res.status(200).json({ message: "fails" });
           }
           if (response) {
             pool.query(jwtModal.getPosionRole, [email], (err, data) => {
               if (err) {
-                return res.status(200).json("fails");
+                return res.status(200).json({ message: "fails" });
               }
               if (data) {
                 let payload = {
@@ -39,6 +40,7 @@ const LoginEmployee = (req, res) => {
                   access_token: token,
                   email: email,
                   data,
+                  position: data[0].TenViTri,
                 });
               }
             });
@@ -46,7 +48,7 @@ const LoginEmployee = (req, res) => {
         }
       );
     } else {
-      return res.status(200).json("fails");
+      return res.status(200).json({ message: "fails" });
     }
   });
 };

@@ -139,13 +139,18 @@ const updateById = (req, res) => {
   let lichtrinh5 = req.body.editor[4];
   let lichtrinh6 = req.body.editor[5];
   let lichtrinh7 = req.body.editor[6];
-  console.log(req.body.char);
+  let ngayDi = req.body.date[0];
+  let ngayVe = req.body.date[1];
+  console.log(ngayDi);
+  console.log(ngayVe);
   pool.query(
-    "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,GiamGia=?,QuyMo=? WHERE MaTour=?",
+    "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,NgayDi=?,NgayVe=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,GiamGia=?,QuyMo=? WHERE MaTour=?",
     [
       tentour,
       diadiemdi,
       diadiemden,
+      ngayDi,
+      ngayVe,
       phuongtien,
       lichtrinh1,
       lichtrinh2,

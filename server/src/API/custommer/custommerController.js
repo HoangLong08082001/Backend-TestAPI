@@ -12,7 +12,7 @@ const getAll = (req, res) => {
   });
 };
 const getDK = (req, res) => {
-  const MaKH=req.body.MaKH;
+  const MaKH = req.body.MaKH;
   pool.query(custommerModel.getDK, [MaKH], (err, result) => {
     if (err) throw err;
     return res.status(200).json({
@@ -72,5 +72,36 @@ const RemoveById = (req, res) => {
     }
   });
 };
-
-module.exports = { getAll, addCustommer, RemoveById, countCustommer,getDK };
+const AddNew = (req, res) => {
+  //   TenKH
+  // CMND
+  // DiaChi
+  // Birth
+  // Sdt
+  let TenKH = req.body.TenKH;
+  let CMND = req.body.CMND;
+  let DiaChi = req.body.DiaChi;
+  let NgaySinh = req.body.NgaySinh;
+  let Sdt = req.body.Sdt;
+  pool.query(
+    "INSERT INTO khachhang(TenKH, CMND,DiaChi,NgaySinh,Sdt) VALUES(?,?,?,?,?)",
+    [TenKH, CMND, DiaChi, NgaySinh, Sdt],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: "fails" });
+      }
+      if (result) {
+        return res.status(200).json({ message: "success" });
+      }
+    }
+  );
+};
+module.exports = {
+  getAll,
+  addCustommer,
+  RemoveById,
+  countCustommer,
+  getDK,
+  AddNew,
+};

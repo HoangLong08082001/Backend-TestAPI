@@ -26,7 +26,7 @@ const addEmployee = (req, res) => {
     }
     pool.query(
       employeeModel.addEmployee,
-      [tennv, cmnd, ngaysinh, sdt, email, hash, id_vitri],
+      [tennv, cmnd, ngaysinh, sdt, 1, email, hash, id_vitri],
       (err, data) => {
         if (err) {
           return res.json("error");
@@ -115,6 +115,28 @@ const getName = (req, res) => {
     }
   });
 };
+const employOut = (req, res) => {
+  let id = req.body.id;
+  let tennv = req.body.TenNV;
+  let cmnd = req.body.cmnd;
+  let sdt = req.body.Sdt;
+  let id_vitri = req.body.Position;
+  pool.query(
+    `UPDATE nhanvien SET TenNV=${tennv}, CMND=${cmnd}, Sdt=${sdt}, TrangThai=${0}, id_vitri=${id_vitri} WHERE MaNV=${id}`,
+    (err, result) => {
+      if (err) {
+        return res.status(200).json({
+          message: "fails",
+        });
+      }
+      if (result) {
+        return res.status(200).json({
+          message: "success",
+        });
+      }
+    }
+  );
+};
 module.exports = {
   getAll,
   removeByID,
@@ -124,4 +146,5 @@ module.exports = {
   countEmployee,
   getUserAccount,
   getName,
+  employOut,
 };

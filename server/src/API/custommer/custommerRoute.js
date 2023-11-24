@@ -4,6 +4,7 @@ import express from "express";
 const router = express.Router();
 
 export default function custommerRoute(app) {
+  router.post("/add-custommer", customerController.AddNew);
   router.post("/getDK", customerController.getDK);
   router.all("*", checkUserJWT, checkUserPermission);
   router.get("/list-customer", customerController.getAll);
