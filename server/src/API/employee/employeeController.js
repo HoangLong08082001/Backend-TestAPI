@@ -117,22 +117,16 @@ const getName = (req, res) => {
 };
 const employOut = (req, res) => {
   let id = req.body.id;
-  let tennv = req.body.TenNV;
-  let cmnd = req.body.cmnd;
-  let sdt = req.body.Sdt;
-  let id_vitri = req.body.Position;
+  console.log(id);
   pool.query(
-    `UPDATE nhanvien SET TenNV=${tennv}, CMND=${cmnd}, Sdt=${sdt}, TrangThai=${0}, id_vitri=${id_vitri} WHERE MaNV=${id}`,
-    (err, result) => {
+    `UPDATE nhanvien SET TrangThai=${0} WHERE MaNV=${id}`,
+    (err, data) => {
       if (err) {
-        return res.status(200).json({
-          message: "fails",
-        });
+        console.log(err);
+        return res.status(200).json({ message: "fails" });
       }
-      if (result) {
-        return res.status(200).json({
-          message: "success",
-        });
+      if (data) {
+        return res.status(200).json({ message: "success" });
       }
     }
   );
