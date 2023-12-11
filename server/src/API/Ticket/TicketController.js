@@ -35,7 +35,7 @@ const AddTicket = (req, res) => {
       }
       if (result) {
         pool.query(
-          "INSERT INTO hoadon(Tongtien,MaPhieu) VALUES(?,(SELECT MaPhieu FROM phieudattour WHERE MaKH=?))",
+          "INSERT INTO hoadon (Tongtien,MaPhieu) VALUES(?,(SELECT MaPhieu FROM phieudattour WHERE MaKH=?))",
           [tongtien, makh],
           (err, result) => {
             if (err) {

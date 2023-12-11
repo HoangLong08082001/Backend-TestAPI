@@ -1,4 +1,4 @@
-const { gettour, gettourid, Searchtour ,Addtourlove,gettourlove } = require("../tour/tourService");
+const { gettour, gettourid, Searchtour ,Addtourlove,gettourlove,Gettourhere,gettouridbill,gettouridlist } = require("../tour/tourService");
 const pool = require("../../config/database");
 module.exports = {
   gettourall: (reg, res) => {
@@ -10,7 +10,7 @@ module.exports = {
           message: "Database connection error",
         });
       }
-      console.log(results);
+      
       return res.status(200).json({
         data: results,
       });
@@ -31,9 +31,40 @@ module.exports = {
       });
     });
   },
+  gettourfollowidlist: (reg, res) => {
+    const id = reg.params.id;
+    gettouridlist(id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: err,
+          message: "Database connection error",
+        });
+      }
+      return res.status(200).json({
+        data: results,
+      });
+    });
+  },
+  Gettourbill: (reg, res) => {
+    const data = reg.body;
+    console.log(data)
+    gettouridbill(data, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: err,
+          message: "Database connection error",
+        });
+      }
+      return res.status(200).json({
+        data: results,
+      });
+    });
+  },
   searchtourdata: (reg, res) => {
     const data = reg.body;
-    console.log(data);
+   
     Searchtour(data, (err, results) => {
       if (err) {
         console.log(err);
@@ -47,9 +78,26 @@ module.exports = {
       });
     });
   },
+  gettourhere: (reg, res) => {
+    const data = reg.body;
+    console.log(data);
+    Gettourhere(data, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: err,
+          message: "Database connection error",
+        });
+      }
+      console.log(results);
+      return res.status(200).json({
+        data: results,
+      });
+    });
+  },
   addlovetour: (reg, res) => {
     const data = reg.body;
-    console.log(data)
+    
     if(data!=null)
     {
       pool.query(
@@ -96,7 +144,7 @@ module.exports = {
     }
     gettourlove(data,(err, results) => {
       if (err) {
-        console.log(err);
+       
         return res.status(500).json({
           success: err,
           message: "Database connection error",

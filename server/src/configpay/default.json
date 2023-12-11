@@ -1,0 +1,6 @@
+{
+    "vnp_TmnCode":"6H2QSDJU",
+    "vnp_HashSecret":"COEFFDOJPIVQAAZVEYQTDYHSAKCVONAM",
+    "vnp_Url":"http://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
+    "vnp_ReturnUrl": "http://dattourtravel.com:3000/payment/vnpay_return"
+  }

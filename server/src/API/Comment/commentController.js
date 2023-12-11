@@ -8,7 +8,7 @@ module.exports = {
       MaKH:reg.body.MaKH,
       MaTour:reg.body.MaTour
     }
-    console.log(data)
+    
     addcomment(data,(err, results) => {
       if (err) {
         console.log(err);
@@ -26,10 +26,10 @@ module.exports = {
     const data={
       MaTour:reg.body.MaTour
     }
-    console.log(data)
+    
     getcomment(data,(err, results) => {
       if (err) {
-        console.log(err);
+       
         return res.status(500).json({
           success: err,
           message: "Database connection error",

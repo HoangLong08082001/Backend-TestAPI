@@ -3,7 +3,7 @@ import pool from "../../config/database";
 import bcrypt, { hash } from "bcrypt";
 const salt = 10;
 const getAll = (req, res) => {
-  console.log(req.user);
+  
   pool.query(employeeModel.getAll, (err, result) => {
     if (err) throw err;
     if (result) {
