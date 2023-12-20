@@ -75,7 +75,10 @@ const checkUserPermission = (req, res, next) => {
         message: "Not authenticated to use this filed",
       });
     }
-    let canAccess = role.some((item) => item.url_quyen === currentUrl);
+    let canAccess = role.some(
+      (item) =>
+        item.url_quyen === currentUrl || currentUrl.includes(item.url_quyen)
+    );
     if (canAccess === true) {
       next();
     } else {

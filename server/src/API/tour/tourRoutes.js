@@ -1,5 +1,3 @@
-
-
 import express from "express";
 const router = express.Router();
 import tourController from "./tourController";
@@ -9,8 +7,9 @@ export default function tourRoutes(app) {
   router.get("/alltour/list/:id", tourController.gettourfollowidlist);
   router.post("/alltour/gettourbill", tourController.Gettourbill);
   router.post("/search", tourController.searchtourdata);
-  router.post("/tourhere", tourController.gettourhere);
+  router.get("/tourhere/:noiden", tourController.gettourhere);
   router.post("/addtourlove", tourController.addlovetour);
   router.post("/gettourlove", tourController.Gettourlove);
+  router.get("/get-tour-by-voucher", tourController.GetByVoucher);
   return app.use("/tour", router);
 }

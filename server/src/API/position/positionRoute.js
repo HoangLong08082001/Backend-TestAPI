@@ -1,11 +1,12 @@
 import express from "express";
-import posotionController from "./positionController";
+import positionController from "./positionController";
 import { checkUserJWT, checkUserPermission } from "../../middleware/JwtAction";
 const router = express.Router();
 export default function positionRoute(app) {
   router.all("*", checkUserJWT, checkUserPermission);
-  router.get("/list-postion", posotionController.getAll);
-  router.post("/add", posotionController.addPostion);
-  router.delete("/delete/:id", posotionController.RemoveById);
+  router.get("/list-position", positionController.getAll);
+  router.get("/getpositionbyid/:id", positionController.getById);
+  router.post("/add-position", positionController.addPostion);
+  router.delete("/delete/:id", positionController.RemoveById);
   return app.use("/position", router);
 }

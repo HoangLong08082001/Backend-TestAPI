@@ -1,4 +1,13 @@
-const { gettour, gettourid, Searchtour ,Addtourlove,gettourlove,Gettourhere,gettouridbill,gettouridlist } = require("../tour/tourService");
+const {
+  gettour,
+  gettourid,
+  Searchtour,
+  Addtourlove,
+  gettourlove,
+  Gettourhere,
+  gettouridbill,
+  gettouridlist,
+} = require("../tour/tourService");
 const pool = require("../../config/database");
 module.exports = {
   gettourall: (reg, res) => {
@@ -10,7 +19,7 @@ module.exports = {
           message: "Database connection error",
         });
       }
-      
+
       return res.status(200).json({
         data: results,
       });
@@ -48,7 +57,7 @@ module.exports = {
   },
   Gettourbill: (reg, res) => {
     const data = reg.body;
-    console.log(data)
+    console.log(data);
     gettouridbill(data, (err, results) => {
       if (err) {
         console.log(err);
@@ -64,7 +73,7 @@ module.exports = {
   },
   searchtourdata: (reg, res) => {
     const data = reg.body;
-   
+
     Searchtour(data, (err, results) => {
       if (err) {
         console.log(err);
@@ -79,41 +88,53 @@ module.exports = {
     });
   },
   gettourhere: (reg, res) => {
-    const data = reg.body;
-    console.log(data);
-    Gettourhere(data, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({
-          success: err,
-          message: "Database connection error",
-        });
+    let di = "TP.HCM";
+    let den = reg.params.noiden;
+    // Gettourhere((di, den), (err, results) => {
+    //   if (err) {
+    //     console.log(err);
+    //     return res.status(500).json({
+    //       success: err,
+    //       message: "Database connection error",
+    //     });
+    //   }
+    //   console.log(results);
+    //   return res.status(200).json({
+    //     data: results,
+    //   });
+    // });
+    pool.query(
+      `SELECT *, giamgia.mucgiamgia+giamgiathem.mucgiamgiathem AS mucgiamgia
+    FROM tour
+    INNER JOIN giamgia on tour.id_giamgia = giamgia.id_giamgia INNER JOIN giamgiathem ON giamgia.id_giamgia = giamgiathem.id_giamgia
+    WHERE tour.DiaDiemDi = ? AND tour.DiaDiemDen = ?
+    GROUP BY tour.MaTour
+    `,
+      [di, den],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result) {
+          return res.status(200).json({ data: result });
+        }
       }
-      console.log(results);
-      return res.status(200).json({
-        data: results,
-      });
-    });
+    );
   },
   addlovetour: (reg, res) => {
     const data = reg.body;
-    
-    if(data!=null)
-    {
+
+    if (data != null) {
       pool.query(
         `select * from touryeuthich where touryeuthich.MaKH=? and touryeuthich.MaTour=? `,
         [data.MaKH, data.MaTour],
         (error, results) => {
-          
           if (error) {
             return res.status(500).json({
-                     success: err,
-                    message: "Database connection error",
-                  });
-          }
-          else if(results.length === 0)
-          {
-            
+              success: err,
+              message: "Database connection error",
+            });
+          } else if (results.length === 0) {
             Addtourlove(data, (err, results) => {
               if (err) {
                 console.log(err);
@@ -123,37 +144,46 @@ module.exports = {
                 });
               }
               return res.status(200).json({
-                data:"success",
+                data: "success",
               });
             });
-          }
-          else{
+          } else {
             return res.status(200).json({
-              data:"exist",
+              data: "exist",
             });
           }
-          
         }
       );
     }
-   
   },
   Gettourlove: (reg, res) => {
-    const data={
-      MaKH:reg.body.MaKH
-    }
-    gettourlove(data,(err, results) => {
+    const data = {
+      MaKH: reg.body.MaKH,
+    };
+    gettourlove(data, (err, results) => {
       if (err) {
-       
         return res.status(500).json({
           success: err,
           message: "Database connection error",
         });
-      } 
+      }
       return res.status(200).json({
         data: results,
       });
     });
   },
+  GetByVoucher: (req, res) => {
+    pool.query(
+      "SELECT * FROM tour INNER JOIN giamgia ON tour.id_giamgia = giamgia.id_giamgia INNER JOIN giamgiathem ON giamgia.id_giamgia = giamgiathem.id_giamgia",
+      [],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result) {
+          return res.status(200).json({ data: result });
+        }
+      }
+    );
+  },
 };
-

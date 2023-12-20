@@ -60,11 +60,11 @@ module.exports = {
   },
   Gettourhere: (data, callBack) => {
     pool.query(
-      `SELECT tour.MaTour,tour.DiaDiemDi,tour.TenTour,tour.LoaiTour,tour.NgayDi,tour.GiaTour,GROUP_CONCAT(giamgia.ten_dotgiamgia SEPARATOR ' + ') AS ten_dotgiamgia, SUM(giamgia.mucgiamgia) AS mucgiamgia
+      `SELECT *, SUM(giamgia.mucgiamgia+giamgiathem.mucgiamgiathem) AS mucgiamgia
       FROM tour
-      INNER JOIN giamgia on tour.MaTour = giamgia.MaTour
+      INNER JOIN giamgia on tour.id_giamgia = giamgia.id_giamgia INNER JOIN giamgiathem ON tour.id_giamgiathem = giamgiathem.id_giamgiathem
       WHERE tour.DiaDiemDi = ? AND tour.DiaDiemDen = ?
-      GROUP BY tour.NgayDi`,
+      `,
       [data.DiaDiemDi, data.DiaDiemDen],
       (error, results) => {
         if (error) {
