@@ -11,5 +11,7 @@ export default function tourRoutes(app) {
   router.post("/addtourlove", tourController.addlovetour);
   router.post("/gettourlove", tourController.Gettourlove);
   router.get("/get-tour-by-voucher", tourController.GetByVoucher);
+  router.get("/get-tour-withday", tourController.getTourWithDay);
+  router.get("/gettour-with-giamgia", tourController.getTourWithGiamGia);
   return app.use("/tour", router);
 }

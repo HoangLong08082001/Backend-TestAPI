@@ -18,6 +18,8 @@ import loginRoutes from "./API/login/loginRoutes";
 import TicketRoute from "./API/Ticket/TicketRoute";
 import voucherRoutes from "./API/voucher/voucherRoutes";
 import rulesRoutes from "./API/rules/rulesRoutes";
+import StatisRoute from "./API/Statis/StatisRoute";
+import billManagerRoute from "./API/billManager/billManagerRoute";
 const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT;
@@ -70,6 +72,8 @@ TicketRoute(app);
 billrouter(app);
 voucherRoutes(app);
 rulesRoutes(app);
+StatisRoute(app);
+billManagerRoute(app);
 app.use("/payment", payment);
 
 app.listen(port, () => {

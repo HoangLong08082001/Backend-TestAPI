@@ -174,7 +174,35 @@ module.exports = {
   },
   GetByVoucher: (req, res) => {
     pool.query(
-      "SELECT * FROM tour INNER JOIN giamgia ON tour.id_giamgia = giamgia.id_giamgia INNER JOIN giamgiathem ON giamgia.id_giamgia = giamgiathem.id_giamgia",
+      "SELECT * FROM tour JOIN giamgia ON giamgia.id_giamgia = tour.id_giamgia WHERE giamgia.thoigianbatdau >= CURDATE() AND CURDATE() <= giamgia.thoigiantoi",
+      [],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result) {
+          return res.status(200).json({ data: result });
+        }
+      }
+    );
+  },
+  getTourWithDay: (req, res) => {
+    pool.query(
+      "SELECT giamgia.thoigianbatdau AS batdau, giamgia.thoigiantoi AS toi FROM tour JOIN giamgia ON giamgia.id_giamgia = tour.id_giamgia WHERE giamgia.thoigianbatdau >= CURDATE() AND CURDATE() <= giamgia.thoigiantoi",
+      [],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result) {
+          return res.status(200).json({ data: result });
+        }
+      }
+    );
+  },
+  getTourWithGiamGia: (req, res) => {
+    pool.query(
+      "SELECT * FROM tour LEFT JOIN giamgia on tour.id_giamgia = giamgia.id_giamgia LEFT JOIN giamgiathem on tour.id_giamgiathem = giamgiathem.id_giamgiathem",
       [],
       (err, result) => {
         if (err) {
