@@ -7,13 +7,14 @@ const GetAll = (req, res) => {
       console.log(err);
     }
     if (result) {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ message: "success", data: result });
     }
   });
 };
 const ById = (req, res) => {
   let id = req.params.id;
-  console.log(id);pool.query(billManaModel.byid, [id], (err, result) => {
+  console.log(id);
+  pool.query(billManaModel.byid, [id], (err, result) => {
     if (err) {
       console.log(err);
     }

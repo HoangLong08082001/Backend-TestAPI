@@ -1,6 +1,6 @@
 import express from "express";
 import StatisControler from "./StatisController";
-
+import { checkUserJWT, checkUserPermission } from '../../middleware/JwtAction'
 const router = express.Router();
 export default function StatisRoute(app) {
   router.get("/thongke-doanh-thu", StatisControler.getDoanhThu);

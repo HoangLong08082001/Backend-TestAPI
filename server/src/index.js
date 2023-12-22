@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
     origin: [process.env.PORT_VIEWS],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
