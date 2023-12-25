@@ -17,4 +17,13 @@ module.exports = {
       return callBack(null, results);
     });
   },
+  get5star: (callBack) => {
+    pool.query(`SELECT binhluan.DanhGia,tour.MaTour,tour.TenTour ,tour.HinhAnh from binhluan INNER JOIN tour on binhluan.MaTour=tour.MaTour WHERE binhluan.DanhGia=5 or binhluan.DanhGia=4 LIMIT 3`, [], (error, results) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
+  },
+  
 };

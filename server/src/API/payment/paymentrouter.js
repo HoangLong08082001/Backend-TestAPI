@@ -43,7 +43,7 @@ router.post('/create_payment_url', function (req, res, next) {
     let tmnCode ="6H2QSDJU" ;
     let secretKey ="COEFFDOJPIVQAAZVEYQTDYHSAKCVONAM";
     let vnpUrl ="https://sandbox.vnpayment.vn/paymentv2/vpcpay.html" ;
-    let returnUrl ="http://dattourtravel.com:3000/review" ;
+    let returnUrl ="http://dattourtravel.com:3000/Confirm" ;
     let orderId = moment(date).format('DDHHmmss');
     let amount = req.body.amount;
     let bankCode ="NCB";

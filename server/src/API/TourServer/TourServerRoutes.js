@@ -4,6 +4,7 @@ import { checkUserJWT, checkUserPermission } from "../../middleware/JwtAction";
 const router = express.Router();
 
 export default function TourServerRoutes(app) {
+  router.get("/statusphieutour", TourServerController.GETPHIEUTOUR);
   router.all("*", checkUserJWT, checkUserPermission);
   router.get("/getall-tour", TourServerController.getAll);
   router.post("/add-tour", TourServerController.addTour);

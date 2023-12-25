@@ -9,6 +9,14 @@ module.exports = {
       return callBack(null, results);
     });
   },
+  gettour2: (callBack) => {
+    pool.query(`select * from tour `, [], (error, results) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
+  },
   gettourid: (id, callBack) => {
     pool.query(
       `select * from tour where tour.MaTour=?`,
@@ -60,12 +68,13 @@ module.exports = {
   },
   Gettourhere: (data, callBack) => {
     pool.query(
-      `SELECT *, SUM(giamgia.mucgiamgia+giamgiathem.mucgiamgiathem) AS mucgiamgia
+      `SELECT *, giamgia.mucgiamgia+giamgiathem.mucgiamgiathem AS mucgiamgia
       FROM tour
-      INNER JOIN giamgia on tour.id_giamgia = giamgia.id_giamgia INNER JOIN giamgiathem ON tour.id_giamgiathem = giamgiathem.id_giamgiathem
+      LEFT JOIN giamgia on tour.id_giamgia = giamgia.id_giamgia LEFT JOIN giamgiathem ON giamgia.id_giamgia = giamgiathem.id_giamgia
       WHERE tour.DiaDiemDi = ? AND tour.DiaDiemDen = ?
+      GROUP BY tour.MaTour
       `,
-      [data.DiaDiemDi, data.DiaDiemDen],
+      [data.noiDi, data.noiDen],
       (error, results) => {
         if (error) {
           return callBack(error);
@@ -91,6 +100,15 @@ module.exports = {
       if (error) {
         return callBack(error);
       }
+      return callBack(null, results);
+    });
+  },
+  gettourbooksuccess: (data,callBack) => {
+    pool.query(`SELECT tour.HinhAnh,tour.TenTour,tour.MaTour,phieudattour.TrangThai from tour INNER JOIN phieudattour on phieudattour.MaTour=tour.MaTour where phieudattour.MaKH = ?  `, [data.MaKH], (error, results) => {
+      if (error) {
+        return callBack(error);
+      }
+     
       return callBack(null, results);
     });
   },

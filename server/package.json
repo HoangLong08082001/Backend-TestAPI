@@ -34,6 +34,7 @@
     "request": "^2.88.2",
     "sha256": "^0.2.0",
     "sha512": "^0.0.1",
+    "socket.io": "^4.7.2",
     "vnpay": "^0.2.1"
   },
   "devDependencies": {

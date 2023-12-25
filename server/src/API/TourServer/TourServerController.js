@@ -256,6 +256,18 @@ const removeById = (req, res) => {
     }
   });
 };
+const GETPHIEUTOUR = (req, res) => {
+  
+  pool.query("SELECT * FROM phieudattour where phieudattour.TrangThai = 0",[], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json({ message: "false" });
+    }
+    if (result) {
+      return res.status(200).json({ data:result });
+    }
+  });
+};
 const updateById = (req, res) => {
   let tentour = req.body.char[0];
   let giatour = req.body.char[1];
@@ -310,4 +322,4 @@ const updateById = (req, res) => {
     }
   );
 };
-module.exports = { addTour, getAll, removeById, updateById };
+module.exports = { addTour, getAll, removeById, updateById,GETPHIEUTOUR };
