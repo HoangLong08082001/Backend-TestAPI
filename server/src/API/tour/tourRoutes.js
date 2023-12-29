@@ -20,5 +20,6 @@ export default function tourRoutes(app) {
   router.get("/get-khachdangky", tourController.getKhachDangKy);
   router.get("/get-soluongtour", tourController.getSoLuongTour);
   router.get("/get-phieuchuaduyet", tourController.getPhieuChuaDuyet);
+  router.get("/get-giamgia", tourController.getGiamGia);
   return app.use("/tour", router);
 }

@@ -296,4 +296,14 @@ module.exports = {
       }
     );
   },
+  getGiamGia: (req, res) => {
+    pool.query("SELECT * FROM giamgia", [], (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      if (result) {
+        return res.status(200).json({ message: "success", data: result });
+      }
+    });
+  },
 };
