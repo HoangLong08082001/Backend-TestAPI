@@ -24,17 +24,13 @@ const getDK = (req, res) => {
 const FindUser = (req, res) => {
   const username = req.body.username;
   pool.query(custommerModel.FindKhachHang, [username], (err, result) => {
-    
     if (err) throw err;
-    else if(result.length > 0)
-    {
+    else if (result.length > 0) {
       return res.status(200).json({
         data: "failure",
-        MaKH:result[0]
+        MaKH: result[0],
       });
-    }
-    else
-    {
+    } else {
       return res.status(200).json({
         data: "Success",
       });
@@ -43,68 +39,46 @@ const FindUser = (req, res) => {
 };
 
 const addCustommer = (req, res) => {
-  
-  
-  
-  
   let username = req.body.email;
   let pass = req.body.password;
   bcrypt.hash(pass, salt, (err, hash) => {
     if (err) {
       console.log(err);
     } else {
-      pool.query(
-        custommerModel.register,
-        [username, hash],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-            return res.status(200).json("fails");
-          }
-          if (result) {
-            return res.status(200).json("success");
-          }
+      pool.query(custommerModel.register, [username, hash], (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(200).json("fails");
         }
-      );
+        if (result) {
+          return res.status(200).json("success");
+        }
+      });
     }
   });
 };
 const addCustommergoogle = (req, res) => {
-  
-  
-  
-  
   let username = req.body.username;
-  
-  
-    
-      pool.query(
-        custommerModel.registergoogle,
-        [username],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-            return res.status(200).json({
-              message:"faile"
-            });
-          }
-          if (result) {
-            pool.query(custommerModel.FindKhachHang, [username], (err, result) => {
-    
-              if (err) throw err;
-              else if(result.length > 0)
-              {
-                return res.status(200).json({
-                  message:"success",
-                  data:result[0]
-                });
-              }
-            });
-          }
+
+  pool.query(custommerModel.registergoogle, [username], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json({
+        message: "faile",
+      });
+    }
+    if (result) {
+      pool.query(custommerModel.FindKhachHang, [username], (err, result) => {
+        if (err) throw err;
+        else if (result.length > 0) {
+          return res.status(200).json({
+            message: "success",
+            data: result[0],
+          });
         }
-      );
-    
-  
+      });
+    }
+  });
 };
 const countCustommer = (req, res) => {
   pool.query(custommerModel.count, [], (err, rows) => {
@@ -162,5 +136,5 @@ module.exports = {
   getDK,
   AddNew,
   FindUser,
-  addCustommergoogle
+  addCustommergoogle,
 };

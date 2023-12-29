@@ -15,5 +15,10 @@ export default function tourRoutes(app) {
   router.get("/get-tour-by-voucher", tourController.GetByVoucher);
   router.get("/get-tour-withday", tourController.getTourWithDay);
   router.get("/gettour-with-giamgia", tourController.getTourWithGiamGia);
+  router.get("/get-more-voucher", tourController.getMoreController);
+  router.get("/get-soluonghoadon", tourController.getSoLuongHoaDon);
+  router.get("/get-khachdangky", tourController.getKhachDangKy);
+  router.get("/get-soluongtour", tourController.getSoLuongTour);
+  router.get("/get-phieuchuaduyet", tourController.getPhieuChuaDuyet);
   return app.use("/tour", router);
 }

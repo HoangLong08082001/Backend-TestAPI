@@ -14,6 +14,7 @@ class employeeModel {
   static getNameEmployee = "SELECT TenNV FROM nhanvien";
   static outEmployee =
     "UPDATE nhanvien SET TenNV=?, CMND=?, Sdt=?, TrangThai=?, id_vitri=? WHERE MaNV=?";
+  static CheckExists = "SELECT * FROM nhanvien WHERE Email=?";
 }
 
 module.exports = employeeModel;

@@ -21,34 +21,34 @@ import rulesRoutes from "./API/rules/rulesRoutes";
 import StatisRoute from "./API/Statis/StatisRoute";
 
 import billManagerRoute from "./API/billManager/billManagerRoute";
-const http = require('http');
+import StatisConditionRoute from "./API/StatisCondition/StatisConditionRoute";
+const http = require("http");
 const cors = require("cors");
 
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
 const payment = require("./API/payment/paymentrouter");
-const socketIO = require('socket.io');
+const socketIO = require("socket.io");
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
     origin: "http://dattourtravel.com:3000",
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 app.use(
   fileUpload({
     createParentPath: true,
   })
-  
 );
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "100mb" }));
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -88,22 +88,20 @@ voucherRoutes(app);
 rulesRoutes(app);
 StatisRoute(app);
 billManagerRoute(app);
+StatisConditionRoute(app);
 app.use("/payment", payment);
-io.on('connection', (socket) => {
-  
-
-  socket.on('newOrder', (orderData) => {
+io.on("connection", (socket) => {
+  socket.on("newOrder", (orderData) => {
     // Xử lý dữ liệu đơn hàng ở đây (ví dụ: lưu vào database, xử lý logic, ...)
     // Sau khi xử lý, gửi thông báo đến admin về đơn hàng mới
-    console.log(orderData)
-    io.emit('orderNotification', orderData);
+    console.log(orderData);
+    io.emit("orderNotification", orderData);
   });
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
   });
 });
 server.listen(port, () => {
   console.log("Website is running on the port", port);
 });
-

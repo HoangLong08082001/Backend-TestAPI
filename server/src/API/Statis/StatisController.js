@@ -7,7 +7,7 @@ const getDoanhThu = (req, res) => {
       console.log(err);
     }
     if (result) {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ message: "success", data: result });
     }
   });
 };
@@ -17,17 +17,17 @@ const getSoluongTour = (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({ message: "success", data: result });
     }
   });
 };
 const getGiamGia = (req, res) => {
-    pool.query(statisticalModel.giamGia, [], (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          return res.status(200).json({ data: result });
-        }
-      });
+  pool.query(statisticalModel.soluongkhachdat, [], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      return res.status(200).json({ message: "success", data: result });
+    }
+  });
 };
 module.exports = { getDoanhThu, getKhachHang, getSoluongTour, getGiamGia };

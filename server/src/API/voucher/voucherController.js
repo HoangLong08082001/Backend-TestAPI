@@ -37,8 +37,7 @@ const addMoreVoucher = (req, res) => {
   console.log(
     id_giamgia + " " + name + " " + start + " " + end + " " + percent
   );
-  if(+id_giamgia !== 0)
-  {
+  if (+id_giamgia !== 0) {
     pool.query(
       voucherModel.addMore,
       [name, start, end, percent, id_giamgia],
@@ -52,8 +51,7 @@ const addMoreVoucher = (req, res) => {
         }
       }
     );
-  }else if (+id_giamgia === 0)
-  {
+  } else if (+id_giamgia === 0) {
     pool.query(
       voucherModel.addMoreNoGiamGia,
       [name, start, end, percent],
@@ -69,7 +67,7 @@ const addMoreVoucher = (req, res) => {
     );
   }
 };
-const getMoreVoucher = (req,res)=>{
+const getMoreVoucher = (req, res) => {
   pool.query(voucherModel.getMore, [], (err, result) => {
     if (err) {
       console.log(err);
@@ -79,8 +77,8 @@ const getMoreVoucher = (req,res)=>{
       return res.status(200).json({ message: "success", data: result });
     }
   });
-}
-const getMoreVoucherAgain = (req,res)=>{
+};
+const getMoreVoucherAgain = (req, res) => {
   pool.query(voucherModel.getMoreAgain, [], (err, result) => {
     if (err) {
       console.log(err);
@@ -90,5 +88,23 @@ const getMoreVoucherAgain = (req,res)=>{
       return res.status(200).json({ message: "success", data: result });
     }
   });
-}
-module.exports = { addVoucher, getVoucher, addMoreVoucher,getMoreVoucher ,getMoreVoucherAgain};
+};
+const getLatest = (req, res) => {
+  pool.query(voucherModel.lastest, [], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json({ message: "false" });
+    }
+    if (result) {
+      return res.status(200).json({ message: "success", data: result });
+    }
+  });
+};
+module.exports = {
+  addVoucher,
+  getVoucher,
+  addMoreVoucher,
+  getMoreVoucher,
+  getMoreVoucherAgain,
+  getLatest,
+};

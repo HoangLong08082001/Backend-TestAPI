@@ -3,7 +3,6 @@ import pool from "../../config/database";
 import bcrypt, { hash } from "bcrypt";
 const salt = 10;
 const getAll = (req, res) => {
-  
   pool.query(employeeModel.getAll, (err, result) => {
     if (err) throw err;
     if (result) {
@@ -20,20 +19,30 @@ const addEmployee = (req, res) => {
   let email = req.body.Email;
   let pass = req.body.Password;
   let id_vitri = req.body.Position;
-  bcrypt.hash(pass, salt, (err, hash) => {
+  pool.query(employeeModel.CheckExists, [email], (err, result) => {
     if (err) {
       console.log(err);
-    }
-    pool.query(
-      employeeModel.addEmployee,
-      [tennv, cmnd, ngaysinh, sdt, 1, email, hash, id_vitri],
-      (err, data) => {
+    } else if (result.length > 0) {
+      return res.status(200).json({ message: "exists" });
+    } else {
+      bcrypt.hash(pass, salt, (err, hash) => {
         if (err) {
-          return res.json("error");
+          console.log(err);
         }
-        return res.json(data);
-      }
-    );
+        pool.query(
+          employeeModel.addEmployee,
+          [tennv, cmnd, ngaysinh, sdt, 1, email, hash, id_vitri],
+          (err, data) => {
+            if (err) {
+              return res.json("error");
+            }
+            if (data) {
+              return res.status(200).json({ message: "success" });
+            }
+          }
+        );
+      });
+    }
   });
 };
 

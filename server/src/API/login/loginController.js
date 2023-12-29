@@ -12,7 +12,7 @@ const LoginEmployee = (req, res) => {
     if (err) {
       return res.status(200).json({ message: "fails" });
     }
-    if (data.length > 0 && data[0].TrangThai===1) {
+    if (data.length > 0 && data[0].TrangThai === 1) {
       console.log(data[0]);
       bcrypt.compare(
         req.body.password.toString(),

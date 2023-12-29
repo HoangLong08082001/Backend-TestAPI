@@ -19,7 +19,7 @@ const ById = (req, res) => {
       console.log(err);
     }
     if (result) {
-      return res.status(200).json({ data: result });
+      return res.status(200).json({  message: "success",data: result });
     }
   });
 };
