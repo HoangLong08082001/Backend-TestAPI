@@ -2,20 +2,32 @@ const pool = require("../../config/database");
 
 module.exports = {
   gettour: (callBack) => {
-    pool.query(`select * from tour LIMIT 8 `, [], (error, results) => {
+    pool.query(`select * from tour LEFT JOIN giamgiathem on tour.id_giamgiathem = giamgiathem.id_giamgiathem LIMIT 8 `, [], (error, results) => {
       if (error) {
         return callBack(error);
       }
       return callBack(null, results);
     });
   },
-  gettour2: (callBack) => {
-    pool.query(`select * from tour `, [], (error, results) => {
-      if (error) {
-        return callBack(error);
-      }
-      return callBack(null, results);
-    });
+  gettour2: (data,callBack) => {
+    if(data.LoaiTour !== null)
+    {
+      pool.query(`select * from tour LEFT JOIN giamgiathem on tour.id_giamgiathem = giamgiathem.id_giamgiathem where tour.LoaiTour = ? `, [data.LoaiTour], (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      });
+    }
+    else
+    {
+      pool.query(`select * from tour LEFT JOIN giamgiathem on tour.id_giamgiathem = giamgiathem.id_giamgiathem `, [], (error, results) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      });
+    }
   },
   gettourid: (id, callBack) => {
     pool.query(
@@ -104,11 +116,19 @@ module.exports = {
     });
   },
   gettourbooksuccess: (data,callBack) => {
-    pool.query(`SELECT tour.HinhAnh,tour.TenTour,tour.MaTour,phieudattour.TrangThai from tour INNER JOIN phieudattour on phieudattour.MaTour=tour.MaTour where phieudattour.MaKH = ?  `, [data.MaKH], (error, results) => {
+    pool.query(`SELECT tour.HinhAnh,tour.TenTour,tour.MaTour,phieudattour.TrangThai,phieudattour.MaPhieu from tour INNER JOIN phieudattour on phieudattour.MaTour=tour.MaTour where phieudattour.MaKH = ?  `, [data.MaKH], (error, results) => {
       if (error) {
         return callBack(error);
       }
      
+      return callBack(null, results);
+    });
+  },
+  removetourlove: (data,callBack) => {
+    pool.query(`DELETE from touryeuthich where touryeuthich.MaKH=? and touryeuthich.MaTour=? `, [data.MaKH,data.MaTour], (error, results) => {
+      if (error) {
+        return callBack(error);
+      }
       return callBack(null, results);
     });
   },

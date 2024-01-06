@@ -17,9 +17,16 @@ module.exports = {
           message: "Database connection error",
         });
       } 
-      return res.status(200).json({
-        data: "success",
-      });
+      else if(results==='fail')
+      {
+        return res.status(200).json({
+          data: "fail",
+        });
+      }
+      else
+        return res.status(200).json({
+          data: "success",
+        });
     });
   },
   Getcomments: (reg, res) => {

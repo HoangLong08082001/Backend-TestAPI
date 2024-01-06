@@ -9,6 +9,7 @@ const {
   gettouridbill,
   gettouridlist,
   gettourbooksuccess,
+  removetourlove,
 } = require("../tour/tourService");
 const pool = require("../../config/database");
 module.exports = {
@@ -28,7 +29,8 @@ module.exports = {
     });
   },
   gettourall2: (reg, res) => {
-    gettour2((err, results) => {
+    const data={LoaiTour:reg.body.data};
+    gettour2(data,(err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -172,6 +174,23 @@ module.exports = {
       });
     });
   },
+  Removetourlove: (reg, res) => {
+    const data = {
+      MaKH: reg.body.MaKH,
+      MaTour: reg.body.MaTour
+    };
+    removetourlove(data, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: err,
+          message: "Database connection error",
+        });
+      }
+      return res.status(200).json({
+        data:"Remove success",
+      });
+    });
+  },
   Gettourbooksuccess: (reg, res) => {
     const data = { MaKH: reg.body.MaKH };
 
@@ -190,7 +209,7 @@ module.exports = {
   },
   GetByVoucher: (req, res) => {
     pool.query(
-      "SELECT * FROM tour JOIN giamgia ON giamgia.id_giamgia = tour.id_giamgia WHERE giamgia.thoigianbatdau >= CURDATE() AND CURDATE() <= giamgia.thoigiantoi",
+      "SELECT * FROM tour JOIN giamgia ON giamgia.id_giamgia = tour.id_giamgia WHERE giamgia.thoigianbatdau <= CURDATE() AND giamgia.thoigiantoi >= CURDATE() ",
       [],
       (err, result) => {
         if (err) {
@@ -204,7 +223,7 @@ module.exports = {
   },
   getTourWithDay: (req, res) => {
     pool.query(
-      "SELECT *, giamgia.thoigianbatdau AS batdau, giamgia.thoigiantoi AS toi FROM tour JOIN giamgia ON giamgia.id_giamgia = tour.id_giamgia WHERE giamgia.thoigianbatdau >= CURDATE() AND CURDATE() <= giamgia.thoigiantoi",
+      "SELECT *, giamgia.thoigianbatdau AS batdau, giamgia.thoigiantoi AS toi FROM tour JOIN giamgia ON giamgia.id_giamgia = tour.id_giamgia WHERE giamgia.thoigianbatdau <= CURDATE() AND giamgia.thoigiantoi >= CURDATE()  ",
       [],
       (err, result) => {
         if (err) {

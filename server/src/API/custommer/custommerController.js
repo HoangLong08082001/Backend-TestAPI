@@ -37,7 +37,55 @@ const FindUser = (req, res) => {
     }
   });
 };
+const UpdateUser = (req, res) => {
+  const TenKH = req.body.TenKH;
+  const DiaChi = req.body.DiaChi;
+  const CMND = req.body.CMND;
+  const Sdt = req.body.Sdt;
+  const MaKH = req.body.MaKH;
+  pool.query(custommerModel.updatettuser, [TenKH,DiaChi,CMND,Sdt,MaKH], (err, result) => {
+    if (err) throw err;
+    else {
+      return res.status(200).json({
+        data: "Success",
+      });
+    }
+  });
+};
+const UpdatebookUser = (req, res) => {
+  const TenKH = req.body.TenKH;
+  const DiaChi = req.body.DiaChi;
+  const Sdt = req.body.Sdt;
+  const MaKH = req.body.MaKH;
+  const value= req.body;
+  pool.query(`select * from khachhang where khachhang.MaKH=? `, [MaKH], (err, result) => {
+    if (err) throw err;
+    else {
+      console.log(value);
+      const data = result[0];
+      if(data.TenKH === null || data.DiaChi=== null || data.Sdt === null )
+      {
+     
+        pool.query(`UPDATE khachhang SET TenKH = ?,DiaChi =?,Sdt=?  where khachhang.MaKH = ? `, [TenKH,DiaChi,Sdt,MaKH], (err, result) => {
+          if (err) throw err;
+          else {
+           
+            return res.status(200).json({
+              data: "Success",
+            });
+          }
+        });
+      }
+      else
+      {
+        return res.status(200).json({
+          data: "Success",
+        });
+      }
+    }
+  });
 
+};
 const addCustommer = (req, res) => {
   let username = req.body.email;
   let pass = req.body.password;
@@ -137,4 +185,6 @@ module.exports = {
   AddNew,
   FindUser,
   addCustommergoogle,
+  UpdateUser,
+  UpdatebookUser
 };
