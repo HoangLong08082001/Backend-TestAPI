@@ -8,7 +8,7 @@ dotenv.config();
 const salt = 10;
 const LoginClient = (req, res) => {
   let username = req.body.username;
-  pool.query(LoginModal.loginClient, [username], (err,data) => {
+  pool.query(LoginModal.loginClient, [username], (err, data) => {
     if (err) {
       return res.status(200).json("fails");
     }
@@ -21,14 +21,11 @@ const LoginClient = (req, res) => {
             return res.status(200).json("fails");
           }
           if (response) {
-               
-                return res.status(200).json({
-                  message: "success",
-                  username: username,
-                  MaKH:data[0].MaKH,
-                });
-              
-           
+            return res.status(200).json({
+              message: "success",
+              username: username,
+              MaKH: data[0].MaKH,
+            });
           }
         }
       );

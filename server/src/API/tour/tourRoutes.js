@@ -3,7 +3,7 @@ const router = express.Router();
 import tourController from "./tourController";
 export default function tourRoutes(app) {
   router.get("/alltour", tourController.gettourall);
-  router.get("/alltour2", tourController.gettourall2);
+  router.post("/alltour2", tourController.gettourall2);
   router.get("/alltour/:id", tourController.gettourfollowid);
   router.get("/alltour/list/:id", tourController.gettourfollowidlist);
   router.post("/alltour/gettourbill", tourController.Gettourbill);
@@ -12,6 +12,8 @@ export default function tourRoutes(app) {
   router.post("/tourbook", tourController.Gettourbooksuccess);
   router.post("/addtourlove", tourController.addlovetour);
   router.post("/gettourlove", tourController.Gettourlove);
+  router.post("/removetourlove", tourController.Removetourlove);
+  
   router.get("/get-tour-by-voucher", tourController.GetByVoucher);
   router.get("/get-tour-withday", tourController.getTourWithDay);
   router.get("/gettour-with-giamgia", tourController.getTourWithGiamGia);
@@ -21,5 +23,6 @@ export default function tourRoutes(app) {
   router.get("/get-soluongtour", tourController.getSoLuongTour);
   router.get("/get-phieuchuaduyet", tourController.getPhieuChuaDuyet);
   router.get("/get-giamgia", tourController.getGiamGia);
+  router.get('/get-tourhomepage', tourController.getTourHomePage);
   return app.use("/tour", router);
 }

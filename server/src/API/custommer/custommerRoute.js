@@ -5,6 +5,8 @@ const router = express.Router();
 
 export default function custommerRoute(app) {
   router.post("/add-custommer", customerController.AddNew);
+  router.post("/addttuser", customerController.UpdateUser);
+  router.post("/addttuserbook", customerController.UpdatebookUser);
   router.post("/getDK", customerController.getDK);
   router.post("/register-custommer/finduser", customerController.FindUser);
   router.post(

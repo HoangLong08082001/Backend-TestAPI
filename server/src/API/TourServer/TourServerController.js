@@ -1,5 +1,6 @@
 import fs from "fs";
 import pool from "../../config/database";
+import { giamGia } from "../Statis/StaticModel.js";
 const TourSerModal = require("./TourServerModel.js");
 const getAll = (req, res) => {
   pool.query("SELECT * FROM tour", [], (err, result) => {
@@ -36,7 +37,7 @@ const addTour = (req, res) => {
   let phuongtien = req.body.select[3];
   let giamgia = req.body.select[4];
   let giamgiathem = req.body.select[5];
-  let quyMo = req.body.number[0];
+  let quyMo = req.body.num[0];
   let imgname1 = req.files.imgone[0].name;
   let imgname2 = req.files.imgone[1].name;
   let imgname3 = req.files.imgone[2].name;
@@ -68,14 +69,17 @@ const addTour = (req, res) => {
   img5.mv(uploadPath4, (err) => {
     if (err) console.log(err);
   });
-
+  console.log(req.body.char);
+  let tenTour = `Tour du lịch ${diadiemdi}-${diadiemden}`;
+  console.log(tenTour);
   console.log(ngaydi + " " + ngayve);
+  console.log(quyMo + " " + +giamgia + " " + +giamgiathem);
   if (+giamgia === 0 && +giamgiathem === 0) {
     console.log("No dis");
     pool.query(
       "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
-        tentour,
+        tenTour,
         diadiemdi,
         diadiemden,
         ngaydi,
@@ -112,12 +116,13 @@ const addTour = (req, res) => {
         }
       }
     );
-  } else if (+giamgia !== 0) {
-    console.log(giamgia);
+  } 
+   if (+giamgia !== 0 && +giamgiathem !== 0) {
+    console.log(giamgia + " " + giamgiathem);
     pool.query(
-      "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo, id_giamgia) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo, id_giamgia, id_giamgiathem) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
-        tentour,
+        tenTour,
         diadiemdi,
         diadiemden,
         ngaydi,
@@ -140,48 +145,6 @@ const addTour = (req, res) => {
         giatour,
         quyMo,
         giamgia,
-      ],
-      (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(200).json({
-            message: "fails",
-          });
-        }
-        if (data) {
-          return res.status(200).json({
-            message: "success",
-          });
-        }
-      }
-    );
-  } else if (+giamgiathem !== 0) {
-    console.log(giamgiathem);
-    pool.query(
-      "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo, id_giamgiathem) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-      [
-        tentour,
-        diadiemdi,
-        diadiemden,
-        ngaydi,
-        ngayve,
-        phuongtien,
-        imgdata1,
-        imgdata2,
-        imgdata3,
-        imgdata4,
-        imgdata5,
-        lichtrinh1,
-        lichtrinh2,
-        lichtrinh3,
-        lichtrinh4,
-        lichtrinh5,
-        lichtrinh6,
-        lichtrinh7,
-        loaitour,
-        khuvuc,
-        giatour,
-        quyMo,
         giamgiathem,
       ],
       (err, data) => {
@@ -198,12 +161,12 @@ const addTour = (req, res) => {
         }
       }
     );
-  } else if (+giamgia !== 0 && +giamgiathem !== 0) {
-    console.log(giamgia + " " + giamgiathem);
+  } else if (+giamgia !== 0 && +giamgiathem === 0) {
+    console.log(giamgia);
     pool.query(
-      "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo, id_giamgia, id_giamgiathem) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo, id_giamgia) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
-        tentour,
+        tenTour,
         diadiemdi,
         diadiemden,
         ngaydi,
@@ -226,6 +189,48 @@ const addTour = (req, res) => {
         giatour,
         quyMo,
         giamgia,
+      ],
+      (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.status(200).json({
+            message: "fails",
+          });
+        }
+        if (data) {
+          return res.status(200).json({
+            message: "success",
+          });
+        }
+      }
+    );
+  } else if (+giamgiathem !== 0 && +giamgia ===0) {
+    console.log(giamgiathem);
+    pool.query(
+      "INSERT INTO tour(TenTour, DiaDiemDi, DiaDiemDen, NgayDi, NgayVe, PhuongTien, HinhAnh, HinhAnh2, HinhAnh3, HinhAnh4, HinhAnh5, LichTrinh1, LichTrinh2, LichTrinh3, LichTrinh4, LichTrinh5, LichTrinh6, LichTrinh7, LoaiTour, vungMien, GiaTour, QuyMo, id_giamgiathem) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      [
+        tenTour,
+        diadiemdi,
+        diadiemden,
+        ngaydi,
+        ngayve,
+        phuongtien,
+        imgdata1,
+        imgdata2,
+        imgdata3,
+        imgdata4,
+        imgdata5,
+        lichtrinh1,
+        lichtrinh2,
+        lichtrinh3,
+        lichtrinh4,
+        lichtrinh5,
+        lichtrinh6,
+        lichtrinh7,
+        loaitour,
+        khuvuc,
+        giatour,
+        quyMo,
         giamgiathem,
       ],
       (err, data) => {
@@ -257,27 +262,32 @@ const removeById = (req, res) => {
   });
 };
 const GETPHIEUTOUR = (req, res) => {
-  
-  pool.query("SELECT * FROM phieudattour where phieudattour.TrangThai = 0",[], (err, result) => {
-    if (err) {
-      console.log(err);
-      return res.status(200).json({ message: "false" });
+  pool.query(
+    "SELECT * FROM phieudattour where phieudattour.TrangThai = 0",
+    [],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(200).json({ message: "false" });
+      }
+      if (result) {
+        return res.status(200).json({ data: result });
+      }
     }
-    if (result) {
-      return res.status(200).json({ data:result });
-    }
-  });
+  );
 };
 const updateById = (req, res) => {
   let tentour = req.body.char[0];
   let giatour = req.body.char[1];
   let diadiemdi = req.body.char[2];
-  let id = req.body.char[4];
+  let id = req.body.char[3];
   let loaitour = req.body.select[0];
   let khuvuc = req.body.select[1];
   let diadiemden = req.body.select[2];
   let phuongtien = req.body.select[3];
   let quyMo = req.body.number[0];
+  let giam = req.body.number[1];
+  let giamthem = req.body.number[2];
   let lichtrinh1 = req.body.editor[0];
   let lichtrinh2 = req.body.editor[1];
   let lichtrinh3 = req.body.editor[2];
@@ -289,37 +299,148 @@ const updateById = (req, res) => {
   let ngayVe = req.body.date[1];
   console.log(ngayDi);
   console.log(ngayVe);
-  pool.query(
-    "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,NgayDi=?,NgayVe=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,QuyMo=? WHERE MaTour=?",
-    [
-      tentour,
-      diadiemdi,
-      diadiemden,
-      ngayDi,
-      ngayVe,
-      phuongtien,
-      lichtrinh1,
-      lichtrinh2,
-      lichtrinh3,
-      lichtrinh4,
-      lichtrinh5,
-      lichtrinh6,
-      lichtrinh7,
-      loaitour,
-      khuvuc,
-      giatour,
-      quyMo,
-      id,
-    ],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: "false" });
+  console.log(giam + " " + giamthem);
+  console.log(quyMo);
+  console.log(phuongtien);
+  let tenTour = `Tour du lịch ${diadiemdi}-${diadiemden}`;
+  console.log(tenTour);
+  console.log("Ma tour: ", id);
+  if (+giam === 0 && +giamthem === 0) {
+    pool.query(
+      "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,NgayDi=?,NgayVe=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,QuyMo=? WHERE MaTour=?",
+      [
+        tenTour,
+        diadiemdi,
+        diadiemden,
+        ngayDi,
+        ngayVe,
+        phuongtien,
+        lichtrinh1,
+        lichtrinh2,
+        lichtrinh3,
+        lichtrinh4,
+        lichtrinh5,
+        lichtrinh6,
+        lichtrinh7,
+        loaitour,
+        khuvuc,
+        giatour,
+        quyMo,
+        id,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: "false" });
+        }
+        if (result) {
+          return res.status(200).json({ message: "success" });
+        }
       }
-      if (result) {
-        return res.status(200).json({ message: "success" });
+    );
+  } else if (+giam !== 0 && +giamthem !== 0) {
+    pool.query(
+      "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,NgayDi=?,NgayVe=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,QuyMo=?, id_giamgia=?, id_giamgiathem=? WHERE MaTour=?",
+      [
+        tenTour,
+        diadiemdi,
+        diadiemden,
+        ngayDi,
+        ngayVe,
+        phuongtien,
+        lichtrinh1,
+        lichtrinh2,
+        lichtrinh3,
+        lichtrinh4,
+        lichtrinh5,
+        lichtrinh6,
+        lichtrinh7,
+        loaitour,
+        khuvuc,
+        giatour,
+        quyMo,
+        giam,
+        giamthem,
+        id,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: "false" });
+        }
+        if (result) {
+          return res.status(200).json({ message: "success" });
+        }
       }
-    }
-  );
+    );
+  } else if (+giam !== 0) {
+    pool.query(
+      "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,NgayDi=?,NgayVe=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,QuyMo=?, id_giamgia=? WHERE MaTour=?",
+      [
+        tenTour,
+        diadiemdi,
+        diadiemden,
+        ngayDi,
+        ngayVe,
+        phuongtien,
+        lichtrinh1,
+        lichtrinh2,
+        lichtrinh3,
+        lichtrinh4,
+        lichtrinh5,
+        lichtrinh6,
+        lichtrinh7,
+        loaitour,
+        khuvuc,
+        giatour,
+        quyMo,
+        giam,
+        id,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: "false" });
+        }
+        if (result) {
+          return res.status(200).json({ message: "success" });
+        }
+      }
+    );
+  } else if (+giamthem !== 0) {
+    pool.query(
+      "UPDATE tour SET TenTour=?,DiaDiemDi=?,DiaDiemDen=?,NgayDi=?,NgayVe=?,PhuongTien=?,LichTrinh1=?,LichTrinh2=?,LichTrinh3=?,LichTrinh4=?,LichTrinh5=?,LichTrinh6=?,LichTrinh7=?,LoaiTour=?,vungMien=?,GiaTour=?,QuyMo=?, id_giamgiathem=? WHERE MaTour=?",
+      [
+        tenTour,
+        diadiemdi,
+        diadiemden,
+        ngayDi,
+        ngayVe,
+        phuongtien,
+        lichtrinh1,
+        lichtrinh2,
+        lichtrinh3,
+        lichtrinh4,
+        lichtrinh5,
+        lichtrinh6,
+        lichtrinh7,
+        loaitour,
+        khuvuc,
+        giatour,
+        quyMo,
+        giamthem,
+        id,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: "false" });
+        }
+        if (result) {
+          return res.status(200).json({ message: "success" });
+        }
+      }
+    );
+  }
 };
-module.exports = { addTour, getAll, removeById, updateById,GETPHIEUTOUR };
+module.exports = { addTour, getAll, removeById, updateById, GETPHIEUTOUR };

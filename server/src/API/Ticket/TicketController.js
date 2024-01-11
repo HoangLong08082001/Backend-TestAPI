@@ -1,7 +1,7 @@
 const pool = require("../../config/database");
 const GetTicket = (req, res) => {
   pool.query(
-    "SELECT * FROM phieudattour inner join khachhang on phieudattour.MaKH=khachhang.MaKH inner JOIN tour ON phieudattour.MaTour=tour.MaTour",
+    "SELECT * FROM phieudattour inner join khachhang on phieudattour.MaKH=khachhang.MaKH inner JOIN tour ON phieudattour.MaTour=tour.MaTour left join hoadon on phieudattour.MaPhieu = hoadon.MaPhieu",
     [],
     (err, result) => {
       if (err) {
@@ -31,6 +31,7 @@ const AddTicket = (req, res) => {
   let soluong2 = req.body.soLuong1;
   let soluong3 = req.body.soLuong2;
   let hinhthucthanhtoan = req.body.hinhThucThanhToan;
+  let tongsoluong = soluong1 + soluong2 + soluong3;
   console.log(
     manv +
       " " +
@@ -46,8 +47,11 @@ const AddTicket = (req, res) => {
       " " +
       soluong2 +
       " " +
-      soluong3
+      soluong3 +
+      " " +
+      tongsoluong
   );
+
   pool.query(
     "INSERT INTO phieudattour(MaNV, MaTour,MaKH,NguoiLon,TreEm,EmBe,TrangThai,NgayTao) VALUES(?,?,?,?,?,?,?,?)",
     [manv, matour, makh, soluong1, soluong2, soluong3, 1, ngaytao],
@@ -56,9 +60,10 @@ const AddTicket = (req, res) => {
         console.log(err);
       }
       if (result) {
+        const lastPhieuId = result.insertId;
         pool.query(
-          "INSERT INTO hoadon (Tongtien,HinhThucThanhToan,TrangThaiThanhToan,MaPhieu) VALUES(?,?,?,(SELECT MaPhieu FROM phieudattour WHERE MaKH=?))",
-          [tongtien, hinhthucthanhtoan, 1, makh],
+          "INSERT INTO hoadon (Tongtien,HinhThucThanhToan,TrangThaiThanhToan,MaPhieu) VALUES(?,?,?,?)",
+          [tongtien, hinhthucthanhtoan, 1, lastPhieuId],
           (err, result) => {
             if (err) {
               console.log(err);
@@ -74,10 +79,42 @@ const AddTicket = (req, res) => {
 };
 const UpdateState = (req, res) => {
   let maphieu = req.body.maphieu;
-  console.log(maphieu);
+  let mahoadon = req.body.mahoadon;
+  let hinhthucthanhtoan = req.body.hinhthucthanhtoan;
+  let tongtien = req.body.tongtien;
+  console.log(
+    maphieu + " " + mahoadon + " " + hinhthucthanhtoan + " " + tongtien
+  );
   pool.query(
     "UPDATE phieudattour SET TrangThai=? WHERE MaPhieu=?",
     [1, maphieu],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      if (result) {
+        pool.query(
+          "UPDATE hoadon SET TrangThaiThanhToan=?",
+          [1],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+            if (result) {
+              return res.status(200).json({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
+};
+const DeleteTicket = (req, res) => {
+  let maphieu = req.body.maphieu;
+  console.log(maphieu);
+  pool.query(
+    "DELETE FROM phieudattour WHERE MaPhieu = ?",
+    [maphieu],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -88,4 +125,4 @@ const UpdateState = (req, res) => {
     }
   );
 };
-module.exports = { AddTicket, GetTicket, UpdateState };
+module.exports = { AddTicket, GetTicket, UpdateState, DeleteTicket };

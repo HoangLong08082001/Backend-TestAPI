@@ -9,7 +9,7 @@ class employeeModel {
   static byId =
     "SELECT * FROM nhanvien left join vitri on nhanvien.id_vitri = vitri.id_vitri WHERE MaNV=?";
   static updateById =
-    "UPDATE nhanvien SET TenNV=?, CMND=?, Sdt=?, id_vitri=? WHERE MaNV=?";
+    "UPDATE nhanvien SET TenNV=?, CMND=?, Sdt=? WHERE MaNV=?";
   static count = "SELECT COUNT(*) AS count FROM nhanvien";
   static getNameEmployee = "SELECT TenNV FROM nhanvien";
   static outEmployee =

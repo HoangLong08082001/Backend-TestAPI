@@ -76,14 +76,13 @@ const UpdateEmployee = (req, res) => {
   let cmnd = req.body.cmnd;
   let sdt = req.body.Sdt;
   let id_vitri = req.body.Position;
+  console.log(id + " " + tennv + " " + cmnd + " " + sdt);
   pool.query(
-    employeeModel.updateById,
-    [tennv, cmnd, sdt, id_vitri, id],
+    "UPDATE nhanvien SET TenNV=?, CMND=?, Sdt=? WHERE MaNV=?",
+    [tennv, cmnd, sdt, id],
     (err, result) => {
       if (err) {
-        return res.status(200).json({
-          message: "fails",
-        });
+        console.log(err);
       }
       if (result) {
         return res.status(200).json({
