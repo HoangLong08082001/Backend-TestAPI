@@ -26,17 +26,16 @@ const billadd = (req, res) => {
 const Getphieu = (req, res) => {
   let data = req.body;
   console.log(data);
-  pool.query(
-    BillModel.getphieu,
-    [data.MaTour, data.MaKH, data.MaPhieu],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(200).json({ message: "fails" });
-      }
-      if (result) {
-        return res.status(200).json({ data: result });
-      }
+  pool.query(BillModel.getphieu, [data.MaTour,data.MaKH], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(200).json({ message: "fails" });
+    }
+    if (result) {
+     
+          return res.status(200).json({ data: result });
+      
+      
     }
   );
 };

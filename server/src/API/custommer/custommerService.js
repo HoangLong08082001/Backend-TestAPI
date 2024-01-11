@@ -8,7 +8,5 @@ class custommerModel {
   static RemoveById = "DELETE FROM khachhang WHERE MaKH = ?";
   static count = "SELECT COUNT(*) as count FROM KhachHang";
   static FindKhachHang = "SELECT * FROM Khachhang where khachhang.username = ?";
-  static updatettuser ="UPDATE khachhang SET TenKH = ?,DiaChi =?,CMND=?,Sdt=?  where khachhang.MaKH = ? ";
-  
 }
 module.exports = custommerModel;
