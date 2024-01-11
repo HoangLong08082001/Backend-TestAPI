@@ -2,7 +2,18 @@ import BillModel from "./Billservice";
 import pool from "../../config/database";
 const billadd = (req, res) => {
   let data = req.body;
-    pool.query(BillModel.addphieu, [data.MaTour,data.MaKH,data.NguoiLon,data.TreEm,data.EmBe,0,data.NgayTao], (err, result) => {
+  pool.query(
+    BillModel.addphieu,
+    [
+      data.MaTour,
+      data.MaKH,
+      data.NguoiLon,
+      data.TreEm,
+      data.EmBe,
+      0,
+      data.NgayTao,
+    ],
+    (err, result) => {
       if (err) {
         console.log(err);
         return res.status(200).json({ message: "fails" });
@@ -10,34 +21,42 @@ const billadd = (req, res) => {
       if (result) {
         const lastPhieuId = result.insertId;
         ///id của phiếu mysql trả về
-        pool.query(BillModel.addhoadon,[data.TongTien,data.HinhThucThanhToan,data.TrangThaiThanhToan,lastPhieuId],(err, result)=>{
-          if (err) {
-            console.log(err);
-            return res.status(200).json({ message: "fails" });
+        pool.query(
+          BillModel.addhoadon,
+          [
+            data.TongTien,
+            data.HinhThucThanhToan,
+            data.TrangThaiThanhToan,
+            lastPhieuId,
+          ],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              return res.status(200).json({ message: "fails" });
+            }
+            if (result) {
+              return res
+                .status(200)
+                .json({ data: "success", MaPhieu: lastPhieuId });
+            }
           }
-          if(result){
-            return res.status(200).json({ data: "success",MaPhieu:lastPhieuId });
-          }
-        })
-        
+        );
       }
-    });
+    }
+  );
 };
 const Getphieu = (req, res) => {
   let data = req.body;
   console.log(data);
-  pool.query(BillModel.getphieu, [data.MaTour,data.MaKH], (err, result) => {
+  pool.query(BillModel.getphieu, [data.MaTour, data.MaKH], (err, result) => {
     if (err) {
       console.log(err);
       return res.status(200).json({ message: "fails" });
     }
     if (result) {
-     
-          return res.status(200).json({ data: result });
-      
-      
+      return res.status(200).json({ data: result });
     }
-  );
+  });
 };
 
 module.exports = {
