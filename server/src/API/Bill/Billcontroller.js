@@ -2,48 +2,83 @@ import BillModel from "./Billservice";
 import pool from "../../config/database";
 const billadd = (req, res) => {
   let data = req.body;
-  pool.query(
-    BillModel.addphieu,
-    [
-      data.MaTour,
-      data.MaKH,
-      data.NguoiLon,
-      data.TreEm,
-      data.EmBe,
-      0,
-      data.NgayTao,
-    ],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(200).json({ message: "fails" });
-      }
-      if (result) {
-        const lastPhieuId = result.insertId;
-        ///id của phiếu mysql trả về
-        pool.query(
-          BillModel.addhoadon,
-          [
-            data.TongTien,
-            data.HinhThucThanhToan,
-            data.TrangThaiThanhToan,
-            lastPhieuId,
-          ],
-          (err, result) => {
-            if (err) {
-              console.log(err);
-              return res.status(200).json({ message: "fails" });
+  if (data.HinhThucThanhToan === "Tiền Mặt") {
+    pool.query(
+      BillModel.addphieu,
+      [
+        data.MaTour,
+        data.MaKH,
+        data.NguoiLon,
+        data.TreEm,
+        data.EmBe,
+        0,
+        data.NgayTao,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(200).json({ message: "fails" });
+        }
+        if (result) {
+          const lastPhieuId = result.insertId;
+          ///id của phiếu mysql trả về
+          pool.query(
+            BillModel.addhoadon,
+            [data.TongTien, data.HinhThucThanhToan, 0, lastPhieuId],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                return res.status(200).json({ message: "fails" });
+              }
+              if (result) {
+                return res
+                  .status(200)
+                  .json({ data: "success", MaPhieu: lastPhieuId });
+              }
             }
-            if (result) {
-              return res
-                .status(200)
-                .json({ data: "success", MaPhieu: lastPhieuId });
-            }
-          }
-        );
+          );
+        }
       }
-    }
-  );
+    );
+  } else if (data.HinhThucThanhToan === "Online") {
+    pool.query(
+      BillModel.addphieu,
+      [
+        data.MaTour,
+        data.MaKH,
+        data.NguoiLon,
+        data.TreEm,
+        data.EmBe,
+        1,
+        data.NgayTao,
+      ],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(200).json({ message: "fails" });
+        }
+        if (result) {
+          const lastPhieuId = result.insertId;
+          ///id của phiếu mysql trả về
+          pool.query(
+            BillModel.addhoadon,
+            [data.TongTien, data.HinhThucThanhToan, 1, lastPhieuId],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                return res.status(200).json({ message: "fails" });
+              }
+              if (result) {
+                return res
+                  .status(200)
+                  .json({ data: "success", MaPhieu: lastPhieuId });
+              }
+            }
+          );
+        }
+      }
+    );
+  }
 };
 const Getphieu = (req, res) => {
   let data = req.body;
