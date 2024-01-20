@@ -7,7 +7,7 @@ class voucherModel {
     "INSERT INTO giamgiathem(ten_dotgiamgiathem, thoigianbatdauthem, thoigianketthucthem, mucgiamgiathem) VALUES(?,?,?,?)";
   static get = "SELECT * FROM giamgia ";
   static getMore =
-    "SELECT * FROM giamgiathem join giamgia ON giamgiathem.id_giamgia = giamgia.id_giamgia";
+    "SELECT * FROM giamgiathem";
   static getMoreAgain = "SELECT * FROM giamgiathem ";
   static lastest = "SELECT MAX(giamgia.thoigiantoi) as lastest FROM `giamgia`";
   
