@@ -19,7 +19,7 @@ const LoginEmployee = (req, res) => {
         data[0].password,
         (err, response) => {
           if (err) {
-            return res.status(200).json({ message: "fails" });
+            return res.status(200).json({ message: "wrong" });
           }
           if (response) {
             pool.query(jwtModal.getPosionRole, [email], (err, data) => {
